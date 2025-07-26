@@ -56,16 +56,13 @@ export default function IticaWebsite() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#01161E]">
+    <div className="min-h-screen bg-gradient-to-br from-[#01161E] to-emerald-950">
       {/* Navigation */}
-      <nav className={`fixed w-7/12 z-50 transition-all rounded-4xl duration-300 left-1/2 -translate-x-1/2 ${
-        scrollY > 50 
-          ? 'backdrop-blur-lg shadow-lg border-b border-white/20 mt-5' 
-          : 'bg-transparent'
-      }`}>
+      <nav className={`fixed w-7/12 z-50 transition-all rounded-4xl duration-300 left-1/2 -translate-x-1/2 backdrop-blur-lg shadow-lg border-1 border-white/20  mt-5`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-2">
+              <img src={IticaLogo} alt="Logo Itica" className='w-10 h-10' />
               <span className="text-2xl font-bold bg-slate-300 bg-clip-text text-transparent">
                 Itica
               </span>
@@ -110,7 +107,7 @@ export default function IticaWebsite() {
       <section id="inicio" className="pt-20 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center py-20">
-            <div className="inline-flex items-center px-4 py-2 bg-white/40 backdrop-blur-sm rounded-full border border-white/20 mb-8 shadow-lg">
+            <div className="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full border border-white/20 mb-8 shadow-lg">
               <Star className="w-4 h-4 text-emerald-500 mr-2" />
               <span className="text-sm font-medium text-gray-200">Especialistas en AI para LATAM</span>
             </div>
@@ -133,7 +130,7 @@ export default function IticaWebsite() {
                 Explorar proyectos
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
-              <button className="bg-white/40 backdrop-blur-sm text-gray-200 px-8 py-4 rounded-full font-medium hover:bg-white/60 cursor-pointer transition-all duration-300 border border-white/20">
+              <button className="bg-white/20 backdrop-blur-sm text-gray-200 px-8 py-4 rounded-full font-medium hover:bg-white/40 cursor-pointer transition-all duration-300 border border-white/20">
                 Conocer servicios
               </button>
             </div>
@@ -147,8 +144,8 @@ export default function IticaWebsite() {
               { icon: <Globe className="w-6 h-6" />, title: "LATAM Focus", desc: "Soluciones para la región" },
               { icon: <Code className="w-6 h-6" />, title: "Calidad Premium", desc: "Estándares internacionales" }
             ].map((item, i) => (
-              <div key={i} className="bg-white/20 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                <div className="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center text-white mb-4">
+              <div key={i} className="bg-white/15 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center text-white mb-4">
                   {item.icon}
                 </div>
                 <h3 className="font-bold text-slate-200 mb-2">{item.title}</h3>
@@ -175,8 +172,8 @@ export default function IticaWebsite() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {services.map((service, i) => (
-              <div key={i} className="group bg-white/20 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4">
-                <div className="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300">
+              <div key={i} className="group bg-white/15 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4">
+                <div className="w-16 h-16 bg-slate-800/70 rounded-2xl flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300">
                   {service.icon}
                 </div>
                 <h3 className="text-xl font-bold text-gray-200 mb-4">{service.title}</h3>
@@ -202,7 +199,7 @@ export default function IticaWebsite() {
 
           <div className="grid md:grid-cols-2 gap-8">
             {projects.map((project, i) => (
-              <div key={i} className="group bg-white/20 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+              <div key={i} className="group bg-white/15 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
                 <div className="flex items-start justify-between mb-6">
                   <h3 className="text-2xl font-bold text-gray-200 group-hover:text-emerald-600 transition-colors">
                     {project.name}
@@ -232,8 +229,8 @@ export default function IticaWebsite() {
             Conversemos sobre cómo podemos transformar tu visión en realidad tecnológica
           </p>
           
-          <div className="bg-white/20 backdrop-blur-lg rounded-3xl p-12 border border-white/20 shadow-2xl">
-            <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="bg-white/15 backdrop-blur-lg rounded-3xl p-12 border border-white/20 shadow-2xl">
+            <div className="grid md:grid-cols-2 gap-8 items-end">
               <div className="text-left">
                 <h3 className="text-2xl font-bold text-gray-200 mb-4">Hablemos de tu proyecto</h3>
                 <div className="space-y-3">
@@ -253,7 +250,7 @@ export default function IticaWebsite() {
               </div>
               
               <div>
-                <button className="w-full bg-emerald-500 text-white px-8 py-4 rounded-2xl font-medium hover:shadow-xl transition-all duration-300 transform hover:scale-105 mb-4">
+                <button className="w-full cursor-pointer bg-emerald-500 text-white px-8 py-4 rounded-2xl font-medium hover:shadow-xl transition-all duration-300 transform hover:scale-105">
                   Iniciar conversación
                 </button>
               </div>
