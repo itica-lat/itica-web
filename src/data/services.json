@@ -1,0 +1,24 @@
+{
+    "services": [
+    {
+      "icon": "Brain",
+      "title": "Desarrollo AI/ML",
+      "description": "Soluciones de inteligencia artificial adaptadas a las necesidades específicas del mercado latinoamericano"
+    },
+    {
+      "icon": "Code",
+      "title": "Software a Medida",
+      "description": "Desarrollo de aplicaciones enterprise con tecnologías de vanguardia y arquitecturas escalables"
+    },
+    {
+      "icon": "Globe",
+      "title": "Consultoría Tech",
+      "description": "Asesoramiento estratégico en transformación digital y adopción de tecnologías emergentes"
+    },
+    {
+      "icon": "Users",
+      "title": "Team Augmentation",
+      "description": "Equipos especializados que se integran a tu organización para acelerar el desarrollo"
+    }
+    ]
+}

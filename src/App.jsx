@@ -4,6 +4,8 @@ import { useTypingEffect } from './hooks/typingEffect';
 import { useScrollAnimation } from './hooks/scrollAnimations';
 import { AnimatedElement } from './components/AnimatedElement';
 import IticaLogo from './assets/Itica_Logo_Invertido.png';
+import services from './data/services.json';
+import { Icon } from './components/Icon';
 
 export default function IticaWebsite() {
 
@@ -31,29 +33,6 @@ export default function IticaWebsite() {
     pausaEntreFrames: 2500,
     fraseAleatoria: true
   });
-
-  const services = [
-    {
-      icon: <Brain className="w-8 h-8" />,
-      title: "Desarrollo AI/ML",
-      description: "Soluciones de inteligencia artificial adaptadas a las necesidades específicas del mercado latinoamericano"
-    },
-    {
-      icon: <Code className="w-8 h-8" />,
-      title: "Software a Medida",
-      description: "Desarrollo de aplicaciones enterprise con tecnologías de vanguardia y arquitecturas escalables"
-    },
-    {
-      icon: <Globe className="w-8 h-8" />,
-      title: "Consultoría Tech",
-      description: "Asesoramiento estratégico en transformación digital y adopción de tecnologías emergentes"
-    },
-    {
-      icon: <Users className="w-8 h-8" />,
-      title: "Team Augmentation",
-      description: "Equipos especializados que se integran a tu organización para acelerar el desarrollo"
-    }
-  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#01161E] to-emerald-950">
@@ -113,7 +92,7 @@ export default function IticaWebsite() {
             </div>
             
             <AnimatedElement animation="scale" delay={300} threshold={0.1} triggerOnce={true}>
-                          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-slate-700 to-emerald-600 bg-clip-text text-transparent leading-tight">
+              <h1 className=" cursor-default text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-slate-700 to-emerald-600 bg-clip-text text-transparent leading-tight">
               Innovación que
               <br />
               <span className="bg-gradient-to-r from-emerald-400 to-emerald-200 bg-clip-text">{textoAnimado}<span className="animate-pulse">|</span></span>
@@ -170,11 +149,11 @@ export default function IticaWebsite() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {services.map((service, i) => (
+          <div className="grid md:grid-cols-4 gap-6">
+            {services.services.map((service, i) => (
               <div key={i} className="group bg-white/15 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4">
                 <div className="w-16 h-16 bg-slate-800/70 rounded-2xl flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300">
-                  {service.icon}
+                  <Icon name={service.icon} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-200 mb-4">{service.title}</h3>
                 <p className="text-gray-200 leading-relaxed">{service.description}</p>
