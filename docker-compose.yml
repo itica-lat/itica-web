@@ -1,0 +1,11 @@
+services:
+  web:
+    image: ghcr.io/F-A-K-U/itica-web:latest
+    ports:
+      - "80:80"
+    restart: always
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
