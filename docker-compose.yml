@@ -1,6 +1,6 @@
 services:
   web:
-    image: ghcr.io/F-A-K-U/itica-web:latest
+    image: ghcr.io/f-a-k-u/itica-web:latest
     ports:
       - "80:80"
     restart: always
