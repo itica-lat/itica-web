@@ -13,16 +13,15 @@ const ContactPage = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
     }));
   };
 
   const validateForm = () => {
     const { nombre, apellido, correo, consulta } = formData;
-    
-    if (!nombre.trim() || !apellido.trim() || !correo.trim()) {
+    if (!nombre.trim() || !apellido.trim() || !correo.trim() || !consulta.trim()) {
       return 'Todos los campos son obligatorios';
     }
     
@@ -143,7 +142,7 @@ const ContactPage = () => {
                 />
               </div>
 
-                            <div>
+              <div>
                 <label htmlFor="consulta" className="block text-sm font-medium text-gray-700 mb-2">
                   Consulta *
                 </label>
