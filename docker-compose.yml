@@ -11,9 +11,7 @@ services:
       retries: 5
 
   backend:
-    build:
-      context: .
-      dockerfile: backend/Dockerfile
+    image: ghcr.io/f-a-k-u/itica-backend:latest
     ports:
       - "3001:3001"
     restart: always
