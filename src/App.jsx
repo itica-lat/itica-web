@@ -6,11 +6,15 @@ import { AnimatedElement } from './components/AnimatedElement';
 import IticaLogo from './assets/Itica_Logo_Invertido.png';
 import services from './data/services.json';
 import { Icon } from './components/Icon';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import WaitlistPage from './pages/waitlist';
+import ContactPage from './pages/contact';
 
-export default function IticaWebsite() {
-
+// Componente principal de la página de inicio
+function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -34,27 +38,38 @@ export default function IticaWebsite() {
     fraseAleatoria: true
   });
 
+  const handleWaitlistClick = () => {
+    navigate('/waitlist');
+  };
+
+  const handleContactClick = () => {
+    navigate('/contact');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#01161E] to-emerald-950">
       {/* Navigation */}
-      <nav className={`fixed w-7/12 z-50 transition-all rounded-4xl duration-300 left-1/2 -translate-x-1/2 backdrop-blur-lg shadow-lg border-1 border-white/20  mt-5`}>
+      <nav className={`fixed w-7/12 z-50 transition-all rounded-4xl duration-300 left-1/2 -translate-x-1/2 backdrop-blur-lg shadow-lg border-1 border-white/20 mt-5`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-2">
+            <Link to="/" className="flex items-center space-x-2">
               <img src={IticaLogo} alt="Logo Itica" className='w-10 h-10' />
               <span className="text-2xl font-bold bg-slate-300 bg-clip-text text-transparent">
                 Itica
               </span>
-            </div>
+            </Link>
             
             <div className="hidden md:flex items-center space-x-8">
               <a href="#inicio" className="text-gray-200 hover:text-emerald-600 transition-colors">Inicio</a>
               <a href="#servicios" className="text-gray-200 hover:text-emerald-600 transition-colors">Servicios</a>
               <a href="#proyectos" className="text-gray-200 hover:text-emerald-600 transition-colors">Proyectos</a>
               <a href="#contacto" className="text-gray-200 hover:text-emerald-600 transition-colors">Contacto</a>
-              <button className="bg-emerald-600/80 text-white px-6 py-2 rounded-full hover:shadow-lg cursor-pointer transition-all duration-300 transform hover:scale-105 hover:bg-emerald-600">
-                Hablemos
-              </button>
+              <Link 
+                to="/waitlist"
+                className="bg-emerald-600/80 text-white px-6 py-2 rounded-full hover:shadow-lg cursor-pointer transition-all duration-300 transform hover:scale-105 hover:bg-emerald-600"
+              >
+                Únete a Opus
+              </Link>
             </div>
 
             <button 
@@ -74,9 +89,12 @@ export default function IticaWebsite() {
               <a href="#servicios" className="block text-gray-200 hover:text-emerald-600 transition-colors py-2">Servicios</a>
               <a href="#proyectos" className="block text-gray-200 hover:text-emerald-600 transition-colors py-2">Proyectos</a>
               <a href="#contacto" className="block text-gray-200 hover:text-emerald-600 transition-colors py-2">Contacto</a>
-              <button className="w-full bg-emerald-600 text-white px-6 py-3 rounded-full mt-4">
-                Hablemos
-              </button>
+              <Link 
+                to="/waitlist"
+                className="block w-full bg-emerald-600 text-white px-6 py-3 rounded-full mt-4 text-center"
+              >
+                Únete a Opus
+              </Link>
             </div>
           </div>
         )}
@@ -92,11 +110,11 @@ export default function IticaWebsite() {
             </div>
             
             <AnimatedElement animation="scale" delay={300} threshold={0.1} triggerOnce={true}>
-              <h1 className=" cursor-default text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-slate-700 to-emerald-600 bg-clip-text text-transparent leading-tight">
-              Innovación que
-              <br />
-              <span className="bg-gradient-to-r from-emerald-400 to-emerald-200 bg-clip-text">{textoAnimado}<span className="animate-pulse">|</span></span>
-            </h1>
+              <h1 className="cursor-default text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-slate-700 to-emerald-600 bg-clip-text text-transparent leading-tight">
+                Innovación que
+                <br />
+                <span className="bg-gradient-to-r from-emerald-400 to-emerald-200 bg-clip-text">{textoAnimado}<span className="animate-pulse">|</span></span>
+              </h1>
             </AnimatedElement>
             
             <p className="text-xl text-gray-200 mb-12 max-w-3xl mx-auto leading-relaxed">
@@ -105,8 +123,11 @@ export default function IticaWebsite() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <button className="group bg-emerald-600 cursor-pointer text-white px-8 py-4 rounded-full font-medium hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center">
-                Explorar proyectos
+              <button 
+                onClick={handleContactClick}
+                className="group bg-emerald-600 cursor-pointer text-white px-8 py-4 rounded-full font-medium hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center"
+              >
+                Contáctanos
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
               <button className="bg-white/20 backdrop-blur-sm text-gray-200 px-8 py-4 rounded-full font-medium hover:bg-white/40 cursor-pointer transition-all duration-300 border border-white/20">
@@ -117,21 +138,21 @@ export default function IticaWebsite() {
 
           {/* Floating Cards */}
           <AnimatedElement animation='fadeInUp' delay={600} threshold={0.1} triggerOnce={true}>
-                      <div className="grid md:grid-cols-3 gap-6 mt-16">
-            {[
-              { icon: <Brain className="w-6 h-6" />, title: "AI-First", desc: "Desarrollo centrado en IA" },
-              { icon: <Globe className="w-6 h-6" />, title: "LATAM Focus", desc: "Soluciones para la región" },
-              { icon: <Code className="w-6 h-6" />, title: "Calidad Premium", desc: "Estándares internacionales" }
-            ].map((item, i) => (
-              <div key={i} className="bg-white/15 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                <div className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center text-white mb-4">
-                  {item.icon}
+            <div className="grid md:grid-cols-3 gap-6 mt-16">
+              {[
+                { icon: <Brain className="w-6 h-6" />, title: "AI-First", desc: "Desarrollo centrado en IA" },
+                { icon: <Globe className="w-6 h-6" />, title: "LATAM Focus", desc: "Soluciones para la región" },
+                { icon: <Code className="w-6 h-6" />, title: "Calidad Premium", desc: "Estándares internacionales" }
+              ].map((item, i) => (
+                <div key={i} className="bg-white/15 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                  <div className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center text-white mb-4">
+                    {item.icon}
+                  </div>
+                  <h3 className="font-bold text-slate-200 mb-2">{item.title}</h3>
+                  <p className="text-gray-200 text-sm">{item.desc}</p>
                 </div>
-                <h3 className="font-bold text-slate-200 mb-2">{item.title}</h3>
-                <p className="text-gray-200 text-sm">{item.desc}</p>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
           </AnimatedElement>
         </div>
       </section>
@@ -140,27 +161,27 @@ export default function IticaWebsite() {
       <section id="servicios" className="py-20 px-4 sm:px-6 lg:px-8">
         <AnimatedElement animation='scale' delay={300} threshold={0.1} triggerOnce={true}>
           <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gray-200 bg-clip-text text-transparent">
-              Nuestros Servicios
-            </h2>
-            <p className="text-xl text-gray-200 max-w-3xl mx-auto">
-              Transformamos ideas en soluciones tecnológicas que impulsan el futuro digital de América Latina
-            </p>
-          </div>
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gray-200 bg-clip-text text-transparent">
+                Nuestros Servicios
+              </h2>
+              <p className="text-xl text-gray-200 max-w-3xl mx-auto">
+                Transformamos ideas en soluciones tecnológicas que impulsan el futuro digital de América Latina
+              </p>
+            </div>
 
-          <div className="grid md:grid-cols-4 gap-6">
-            {services.services.map((service, i) => (
-              <div key={i} className="group bg-white/15 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4">
-                <div className="w-16 h-16 bg-slate-800/70 rounded-2xl flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <Icon name={service.icon} className="w-8 h-8" />
+            <div className="grid md:grid-cols-4 gap-6">
+              {services.services.map((service, i) => (
+                <div key={i} className="group bg-white/15 backdrop-blur-lg rounded-2xl p-8 border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4">
+                  <div className="w-16 h-16 bg-slate-800/70 rounded-2xl flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <Icon name={service.icon} className="w-8 h-8" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-200 mb-4">{service.title}</h3>
+                  <p className="text-gray-200 leading-relaxed">{service.description}</p>
                 </div>
-                <h3 className="text-xl font-bold text-gray-200 mb-4">{service.title}</h3>
-                <p className="text-gray-200 leading-relaxed">{service.description}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
         </AnimatedElement>
       </section>
 
@@ -229,8 +250,11 @@ export default function IticaWebsite() {
               </div>
               
               <div>
-                <button className="w-full cursor-pointer bg-emerald-500 text-white px-8 py-4 rounded-2xl font-medium hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                  Iniciar conversación
+                <button 
+                  onClick={handleContactClick}
+                  className="w-full cursor-pointer bg-emerald-500 text-white px-8 py-4 rounded-2xl font-medium hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                >
+                  Contáctanos
                 </button>
               </div>
             </div>
@@ -242,10 +266,10 @@ export default function IticaWebsite() {
       <footer className="text-white py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-2 mb-4 md:mb-0">
+            <Link to="/" className="flex items-center space-x-2 mb-4 md:mb-0">
               <img src={IticaLogo} alt="Itica Logo" className="w-18 h-18" />
               <span className="text-2xl font-bold">Itica</span>
-            </div>
+            </Link>
             
             <div className="text-center md:text-right">
               <p className="text-slate-400 mb-2">Innovación tecnológica para América Latina</p>
@@ -255,5 +279,37 @@ export default function IticaWebsite() {
         </div>
       </footer>
     </div>
+  );
+}
+
+// Componente principal con Router
+export default function IticaWebsite() {
+  return (
+    <Router>
+      <Routes>
+        {/* Ruta principal - página de inicio */}
+        <Route path="/" element={<HomePage />} />
+        
+        {/* Ruta de la waitlist */}
+        <Route path="/waitlist" element={<WaitlistPage />} />
+        <Route path='/contact' element={<ContactPage />} />
+        
+        {/* Ruta 404 - página no encontrada */}
+        <Route path="*" element={
+          <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#01161E] to-emerald-950">
+            <div className="text-center">
+              <h1 className="text-6xl font-bold text-gray-400 mb-4">404</h1>
+              <p className="text-xl text-gray-200 mb-6">Página no encontrada</p>
+              <Link 
+                to="/" 
+                className="inline-block bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-700 transition-colors"
+              >
+                Volver al Inicio
+              </Link>
+            </div>
+          </div>
+        } />
+      </Routes>
+    </Router>
   );
 }
