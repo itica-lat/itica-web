@@ -78,7 +78,7 @@ const WaitlistPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-green-400 to-slate-200">
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-md mx-auto">
           {/* Header */}
@@ -161,7 +161,7 @@ const WaitlistPage = () => {
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 focus:ring-4 focus:ring-blue-200 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full bg-gradient-to-r from-green-400 to-emerald-400 text-white py-3 px-6 rounded-lg font-semibold hover:from-green-400 hover:to-green-600 hover:scale-105 cursor-pointer focus:ring-4 focus:ring-blue-200 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
                   <>

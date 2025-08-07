@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, Users, CheckCircle, AlertCircle } from 'lucide-react';
 
-const WaitlistPage = () => {
+const ContactPage = () => {
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
@@ -206,4 +206,4 @@ const WaitlistPage = () => {
   );
 };
 
-export default WaitlistPage;
+export default ContactPage;
