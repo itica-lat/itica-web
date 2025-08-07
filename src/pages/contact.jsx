@@ -144,13 +144,13 @@ const ContactPage = () => {
               </div>
 
                             <div>
-                <label htmlFor="correo" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="consulta" className="block text-sm font-medium text-gray-700 mb-2">
                   Consulta *
                 </label>
                 <textarea
                   type="textarea"
-                  id="correo"
-                  name="correo"
+                  id="consulta"
+                  name="consulta"
                   value={formData.consulta}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 bg-gray-300/60 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
