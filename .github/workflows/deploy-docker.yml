@@ -109,5 +109,7 @@ jobs:
             docker compose up -d
             docker image prune -f
 
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Mostrar variables
-          run: echo $MONGODB_URI
+        run: echo $MONGODB_URI
