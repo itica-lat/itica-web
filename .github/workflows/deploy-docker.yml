@@ -63,23 +63,24 @@ jobs:
           username: ${{ secrets.AZURE_USER }}
           key: ${{ secrets.AZURE_SSH_KEY }}
           port: ${{ secrets.AZURE_SSH_PORT }}
-          envs: |
-            ${{ secrets.MONGODB_URI }},
-            MONGODB_USER,
-            MONGODB_PASS,
-            MONGODB_DATABASE,
-            SMTP_HOST,
-            SMTP_PORT,
-            SMTP_USER,
-            SMTP_PASS,
-            SMTP_SECURE,
-            EMAIL_FROM,
-            INTERNAL_EMAIL,
-            SALES_EMAIL,
-            RATE_LIMIT_WINDOW_MS,
-            RATE_LIMIT_MAX_REQUESTS,
-            PORT,
-            FRONTEND_URL
+          env:  # Así puedes asignar secretos a variables de entorno
+            MONGODB_URI: ${{ secrets.MONGODB_URI }}
+            MONGODB_USER: ${{ secrets.MONGODB_USER }}
+            MONGODB_PASS: ${{ secrets.MONGODB_PASS }}
+            MONGODB_DATABASE: ${{ secrets.MONGODB_DATABASE }}
+            SMTP_HOST: ${{ secrets.SMTP_HOST }}
+            SMTP_PORT: ${{ secrets.SMTP_PORT }}
+            SMTP_USER: ${{ secrets.SMTP_USER }}
+            SMTP_PASS: ${{ secrets.SMTP_PASS }}
+            SMTP_SECURE: ${{ secrets.SMTP_SECURE }}
+            EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+            INTERNAL_EMAIL: ${{ secrets.INTERNAL_EMAIL }}
+            SALES_EMAIL: ${{ secrets.SALES_EMAIL }}
+            RATE_LIMIT_WINDOW_MS: ${{ secrets.RATE_LIMIT_WINDOW_MS }}
+            RATE_LIMIT_MAX_REQUESTS: ${{ secrets.RATE_LIMIT_MAX_REQUESTS }}
+            PORT: ${{ secrets.PORT }}
+            FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
+
           script: |
             set -e
             sudo mkdir -p /opt/vite-app
@@ -107,3 +108,6 @@ jobs:
             docker compose pull
             docker compose up -d
             docker image prune -f
+
+      - name: Mostrar variables
+          run: echo $MONGODB_URI
