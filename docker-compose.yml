@@ -4,6 +4,12 @@ services:
     ports:
       - "80:80"
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:80 || nc -z localhost 80 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
     depends_on:
       - backend
     networks:
@@ -20,6 +26,12 @@ services:
       - mongodb
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:3001', (res) => process.exit(res.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))\""]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
   mongodb:
     image: mongo:6.0
@@ -29,13 +41,16 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d:ro
     networks:
       - app-network
 
+# Definición de volúmenes para persistencia
 volumes:
   mongodb_data:
     driver: local
 
+# Red personalizada para mejor comunicación
 networks:
   app-network:
     driver: bridge
