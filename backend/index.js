@@ -26,7 +26,7 @@ const limiter = rateLimit({
 });
 
 // Conectar a MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://backend:27017/waitlist', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://mongodb:27017/waitlist', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
