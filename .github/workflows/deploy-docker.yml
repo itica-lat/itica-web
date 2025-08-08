@@ -2,11 +2,11 @@ name: Build & Deploy (Docker)
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 permissions:
   contents: read
-  packages: write   # para push a GHCR
+  packages: write # para push a GHCR
 
 jobs:
   build-and-deploy:
@@ -38,7 +38,7 @@ jobs:
           push: true
           tags: ghcr.io/f-a-k-u/itica-backend:latest
 
-      - name: Build and push image
+      - name: Build and push web image
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -52,33 +52,9 @@ jobs:
           host: ${{ secrets.AZURE_HOST }}
           username: ${{ secrets.AZURE_USER }}
           key: ${{ secrets.AZURE_SSH_KEY }}
-          port: ${{ secrets.AZURE_SSH_PORT || 22 }}
+          port: ${{ secrets.AZURE_SSH_PORT }}
           source: "docker-compose.yml"
           target: "/opt/vite-app/"
-
-      - name: Deploy Backend
-        on:
-          push:
-            branches: [main]
-        jobs:
-          build:
-            runs-on: ubuntu-latest
-            steps:
-              - uses: actions/checkout@v3
-              - name: Set up Node.js
-                uses: actions/setup-node@v3
-                with:
-                  node-version: '16'
-              - name: Install dependencies
-                run: npm install
-              - name: Run application
-                env:
-                  SMTP_HOST: ${{ secrets.SMTP_HOST }}
-                  SMTP_PORT: ${{ secrets.SMTP_PORT }}
-                  SMTP_USER: ${{ secrets.SMTP_USER }}
-                  SMTP_PASS: ${{ secrets.SMTP_PASS }}
-                  SMTP_SECURE: ${{ secrets.SMTP_SECURE }}
-                run: node index.js
 
       - name: Deploy on VM
         uses: appleboy/ssh-action@v1.2.0
@@ -86,18 +62,48 @@ jobs:
           host: ${{ secrets.AZURE_HOST }}
           username: ${{ secrets.AZURE_USER }}
           key: ${{ secrets.AZURE_SSH_KEY }}
-          port: ${{ secrets.AZURE_SSH_PORT || 22 }}
-          env:
-            MONGODB_URI: ${{ secrets.MONGODB_URI }}
-            RATE_LIMIT_WINDOW_MS: ${{ secrets.RATE_LIMIT_WINDOW_MS }}
-            RATE_LIMIT_MAX: ${{ secrets.RATE_LIMIT_MAX }}
+          port: ${{ secrets.AZURE_SSH_PORT }}
+          envs: |
+            MONGODB_URI,
+            MONGODB_USER,
+            MONGODB_PASS,
+            MONGODB_DATABASE,
+            SMTP_HOST,
+            SMTP_PORT,
+            SMTP_USER,
+            SMTP_PASS,
+            SMTP_SECURE,
+            EMAIL_FROM,
+            INTERNAL_EMAIL,
+            SALES_EMAIL,
+            RATE_LIMIT_WINDOW_MS,
+            RATE_LIMIT_MAX_REQUESTS,
+            PORT,
+            FRONTEND_URL
           script: |
             set -e
             sudo mkdir -p /opt/vite-app
             cd /opt/vite-app
-            # login a GHCR con PAT de solo lectura
+            # Crear archivo .env con las variables de entorno
+            echo "MONGODB_URI=${MONGODB_URI}" > .env
+            echo "MONGODB_USER=${MONGODB_USER}" >> .env
+            echo "MONGODB_PASS=${MONGODB_PASS}" >> .env
+            echo "MONGODB_DATABASE=${MONGODB_DATABASE}" >> .env
+            echo "SMTP_HOST=${SMTP_HOST}" >> .env
+            echo "SMTP_PORT=${SMTP_PORT}" >> .env
+            echo "SMTP_USER=${SMTP_USER}" >> .env
+            echo "SMTP_PASS=${SMTP_PASS}" >> .env
+            echo "SMTP_SECURE=${SMTP_SECURE}" >> .env
+            echo "EMAIL_FROM=${EMAIL_FROM}" >> .env
+            echo "INTERNAL_EMAIL=${INTERNAL_EMAIL}" >> .env
+            echo "SALES_EMAIL=${SALES_EMAIL}" >> .env
+            echo "RATE_LIMIT_WINDOW_MS=${RATE_LIMIT_WINDOW_MS}" >> .env
+            echo "RATE_LIMIT_MAX_REQUESTS=${RATE_LIMIT_MAX_REQUESTS}" >> .env
+            echo "PORT=${PORT}" >> .env
+            echo "FRONTEND_URL=${FRONTEND_URL}" >> .env
+            # Login a GHCR con PAT de solo lectura
             echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" --password-stdin
-            # bajar última imagen y levantar
+            # Bajar última imagen y levantar
             docker compose pull
             docker compose up -d
             docker image prune -f
