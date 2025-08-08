@@ -4,58 +4,38 @@ services:
     ports:
       - "80:80"
     restart: always
-    healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
     depends_on:
       - backend
+    networks:
+      - app-network
 
   backend:
     image: ghcr.io/f-a-k-u/itica-backend:latest
     ports:
       - "3001:3001"
     restart: always
-    environment:
-      # Variables de entorno para MongoDB
-      - MONGODB_URI=mongodb://mongodb:27017/itica
-      - DB_HOST=mongodb
-      - DB_PORT=27017
-      - DB_NAME=itica
+    env_file:
+      - .env
     depends_on:
-      mongodb:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      - mongodb
+    networks:
+      - app-network
 
   mongodb:
-    image: mongo:7.0
+    image: mongo:6.0
     container_name: itica_mongodb
     restart: always
     ports:
       - "27017:27017"
-    environment:
-      # Opcional: configurar usuario y contraseña
-      # - MONGO_INITDB_ROOT_USERNAME=admin
-      # - MONGO_INITDB_ROOT_PASSWORD=password123
-      - MONGO_INITDB_DATABASE=itica
     volumes:
-      # Volumen para persistencia de datos
       - mongodb_data:/data/db
-      # Opcional: scripts de inicialización
-      - ./mongo-init:/docker-entrypoint-initdb.d:ro
-    healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
+    networks:
+      - app-network
 
-# Definición de volúmenes para persistencia
 volumes:
   mongodb_data:
     driver: local
+
+networks:
+  app-network:
+    driver: bridge
