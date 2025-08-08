@@ -73,7 +73,7 @@ const Waitlist = mongoose.model('Waitlist', waitlistSchema);
 
 // Configurar nodemailer
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
+  host: process.env.SMTP_HOST || 'smtp.mail.me.com.',
   port: process.env.SMTP_PORT || 587,
   secure: false, // true for 465, false for other ports
   auth: {
