@@ -26,7 +26,7 @@ const limiter = rateLimit({
 });
 
 // Conectar a MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/waitlist', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://mongodb:27017/waitlist', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -74,12 +74,12 @@ const Waitlist = mongoose.model('Waitlist', waitlistSchema);
 // Configurar nodemailer
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
-  port: process.env.SMTP_PORT || 587,
-  secure: false, // true for 465, false for other ports
+  port: parseInt(process.env.SMTP_PORT, 10),
+  secure: process.env.SMTP_SECURE === 'true',
   auth: {
     user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
+    pass: process.env.SMTP_PASS
+  }
 });
 
 // Función para enviar email de bienvenida
@@ -105,6 +105,9 @@ async function enviarEmailBienvenida(datosUsuario) {
         <p style="color: #6b7280; font-size: 14px;">
           Si tienes alguna pregunta, no dudes en contactarnos.
         </p>
+        <p style="color: #6b7280; font-size: 14px;>
+          <strong>Equipo de Itica</strong>
+        </p>
         <hr style="border: 1px solid #e5e7eb; margin: 30px 0;">
         <p style="color: #9ca3af; font-size: 12px; text-align: center;">
           Este correo fue enviado a ${correo} porque te registraste en nuestra lista de espera.
@@ -118,7 +121,7 @@ async function enviarEmailBienvenida(datosUsuario) {
 
 app.post('/api/contact', async (req, res) => {
   const { nombre, apellido, correo, consulta } = req.body;
-    if (!nombre || !correo || !mensaje) {
+    if (!nombre || !correo || !consulta) {
     return res.status(400).json({ success: false, message: 'Todos los campos son obligatorios' });
     }
     try {

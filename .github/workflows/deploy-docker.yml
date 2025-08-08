@@ -2,11 +2,11 @@ name: Build & Deploy (Docker)
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 permissions:
   contents: read
-  packages: write   # para push a GHCR
+  packages: write # para push a GHCR
 
 jobs:
   build-and-deploy:
@@ -38,7 +38,7 @@ jobs:
           push: true
           tags: ghcr.io/f-a-k-u/itica-backend:latest
 
-      - name: Build and push image
+      - name: Build and push web image
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -52,7 +52,7 @@ jobs:
           host: ${{ secrets.AZURE_HOST }}
           username: ${{ secrets.AZURE_USER }}
           key: ${{ secrets.AZURE_SSH_KEY }}
-          port: ${{ secrets.AZURE_SSH_PORT || 22 }}
+          port: ${{ secrets.AZURE_SSH_PORT }}
           source: "docker-compose.yml"
           target: "/opt/vite-app/"
 
@@ -62,14 +62,56 @@ jobs:
           host: ${{ secrets.AZURE_HOST }}
           username: ${{ secrets.AZURE_USER }}
           key: ${{ secrets.AZURE_SSH_KEY }}
-          port: ${{ secrets.AZURE_SSH_PORT || 22 }}
+          port: ${{ secrets.AZURE_SSH_PORT }}
+          envs: MONGODB_URI,MONGODB_USER,MONGODB_PASS,MONGODB_DATABASE,SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASS,SMTP_SECURE,EMAIL_FROM,INTERNAL_EMAIL,SALES_EMAIL,RATE_LIMIT_WINDOW_MS,RATE_LIMIT_MAX_REQUESTS,PORT,FRONTEND_URL,GHCR_TOKEN,GHCR_USERNAME
           script: |
             set -e
             sudo mkdir -p /opt/vite-app
             cd /opt/vite-app
-            # login a GHCR con PAT de solo lectura
-            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" --password-stdin
-            # bajar última imagen y levantar
+            
+            # Crear archivo .env con las variables de entorno
+            cat > .env << EOF
+            MONGODB_URI=${MONGODB_URI}
+            MONGODB_USER=${MONGODB_USER}
+            MONGODB_PASS=${MONGODB_PASS}
+            MONGODB_DATABASE=${MONGODB_DATABASE}
+            SMTP_HOST=${SMTP_HOST}
+            SMTP_PORT=${SMTP_PORT}
+            SMTP_USER=${SMTP_USER}
+            SMTP_PASS=${SMTP_PASS}
+            SMTP_SECURE=${SMTP_SECURE}
+            EMAIL_FROM=${EMAIL_FROM}
+            INTERNAL_EMAIL=${INTERNAL_EMAIL}
+            SALES_EMAIL=${SALES_EMAIL}
+            RATE_LIMIT_WINDOW_MS=${RATE_LIMIT_WINDOW_MS}
+            RATE_LIMIT_MAX_REQUESTS=${RATE_LIMIT_MAX_REQUESTS}
+            PORT=${PORT}
+            FRONTEND_URL=${FRONTEND_URL}
+            EOF
+            
+            # Login a GHCR con PAT de solo lectura
+            echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GHCR_USERNAME}" --password-stdin
+            
+            # Bajar última imagen y levantar
             docker compose pull
             docker compose up -d
             docker image prune -f
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          MONGODB_USER: ${{ secrets.MONGODB_USER }}
+          MONGODB_PASS: ${{ secrets.MONGODB_PASS }}
+          MONGODB_DATABASE: ${{ secrets.MONGODB_DATABASE }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          SMTP_SECURE: ${{ secrets.SMTP_SECURE }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          INTERNAL_EMAIL: ${{ secrets.INTERNAL_EMAIL }}
+          SALES_EMAIL: ${{ secrets.SALES_EMAIL }}
+          RATE_LIMIT_WINDOW_MS: ${{ secrets.RATE_LIMIT_WINDOW_MS }}
+          RATE_LIMIT_MAX_REQUESTS: ${{ secrets.RATE_LIMIT_MAX_REQUESTS }}
+          PORT: ${{ secrets.PORT }}
+          FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
+          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+          GHCR_USERNAME: ${{ secrets.GHCR_USERNAME }}
