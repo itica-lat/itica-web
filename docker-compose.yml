@@ -35,9 +35,9 @@ services:
     image: mongo:7.0
     container_name: itica_mongodb
     restart: always
+    command: 
+      --bind_ip_all
     ports:
-    command:
-      - --bind_ip_all
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
