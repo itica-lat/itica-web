@@ -63,51 +63,32 @@ jobs:
           username: ${{ secrets.AZURE_USER }}
           key: ${{ secrets.AZURE_SSH_KEY }}
           port: ${{ secrets.AZURE_SSH_PORT }}
-          env:  # Así puedes asignar secretos a variables de entorno
-            MONGODB_URI: ${{ secrets.MONGODB_URI }}
-            MONGODB_USER: ${{ secrets.MONGODB_USER }}
-            MONGODB_PASS: ${{ secrets.MONGODB_PASS }}
-            MONGODB_DATABASE: ${{ secrets.MONGODB_DATABASE }}
-            SMTP_HOST: ${{ secrets.SMTP_HOST }}
-            SMTP_PORT: ${{ secrets.SMTP_PORT }}
-            SMTP_USER: ${{ secrets.SMTP_USER }}
-            SMTP_PASS: ${{ secrets.SMTP_PASS }}
-            SMTP_SECURE: ${{ secrets.SMTP_SECURE }}
-            EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
-            INTERNAL_EMAIL: ${{ secrets.INTERNAL_EMAIL }}
-            SALES_EMAIL: ${{ secrets.SALES_EMAIL }}
-            RATE_LIMIT_WINDOW_MS: ${{ secrets.RATE_LIMIT_WINDOW_MS }}
-            RATE_LIMIT_MAX_REQUESTS: ${{ secrets.RATE_LIMIT_MAX_REQUESTS }}
-            PORT: ${{ secrets.PORT }}
-            FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
-
+          envs: MONGODB_URI,MONGODB_USER,MONGODB_PASS,MONGODB_DATABASE,SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASS,SMTP_SECURE,EMAIL_FROM,INTERNAL_EMAIL,SALES_EMAIL,RATE_LIMIT_WINDOW_MS,RATE_LIMIT_MAX_REQUESTS,PORT,FRONTEND_URL
           script: |
-            set -e
-            sudo mkdir -p /opt/vite-app
-            cd /opt/vite-app
-            # Crear archivo .env con las variables de entorno
-            echo "MONGODB_URI=${MONGODB_URI}" > .env
-            echo "MONGODB_USER=${MONGODB_USER}" >> .env
-            echo "MONGODB_PASS=${MONGODB_PASS}" >> .env
-            echo "MONGODB_DATABASE=${MONGODB_DATABASE}" >> .env
-            echo "SMTP_HOST=${SMTP_HOST}" >> .env
-            echo "SMTP_PORT=${SMTP_PORT}" >> .env
-            echo "SMTP_USER=${SMTP_USER}" >> .env
-            echo "SMTP_PASS=${SMTP_PASS}" >> .env
-            echo "SMTP_SECURE=${SMTP_SECURE}" >> .env
-            echo "EMAIL_FROM=${EMAIL_FROM}" >> .env
-            echo "INTERNAL_EMAIL=${INTERNAL_EMAIL}" >> .env
-            echo "SALES_EMAIL=${SALES_EMAIL}" >> .env
-            echo "RATE_LIMIT_WINDOW_MS=${RATE_LIMIT_WINDOW_MS}" >> .env
-            echo "RATE_LIMIT_MAX_REQUESTS=${RATE_LIMIT_MAX_REQUESTS}" >> .env
-            echo "PORT=${PORT}" >> .env
-            echo "FRONTEND_URL=${FRONTEND_URL}" >> .env
-            # Login a GHCR con PAT de solo lectura
-            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" --password-stdin
-            # Bajar última imagen y levantar
-            docker compose pull
-            docker compose up -d
-            docker image prune -f
+            echo "Deploying with the following environment variables:"
+            echo "MongoDB URI: $MONGODB_URI"
+            echo "Port: $PORT"
+            
+            # Tus comandos de deploy aquí
+            cd /path/to/your/app
+            # Actualizar tu aplicación, reiniciar servicios, etc.
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          MONGODB_USER: ${{ secrets.MONGODB_USER }}
+          MONGODB_PASS: ${{ secrets.MONGODB_PASS }}
+          MONGODB_DATABASE: ${{ secrets.MONGODB_DATABASE }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          SMTP_SECURE: ${{ secrets.SMTP_SECURE }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          INTERNAL_EMAIL: ${{ secrets.INTERNAL_EMAIL }}
+          SALES_EMAIL: ${{ secrets.SALES_EMAIL }}
+          RATE_LIMIT_WINDOW_MS: ${{ secrets.RATE_LIMIT_WINDOW_MS }}
+          RATE_LIMIT_MAX_REQUESTS: ${{ secrets.RATE_LIMIT_MAX_REQUESTS }}
+          PORT: ${{ secrets.PORT }}
+          FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
 
       - name: Checkout code
         uses: actions/checkout@v4
