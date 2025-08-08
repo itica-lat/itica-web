@@ -56,6 +56,30 @@ jobs:
           source: "docker-compose.yml"
           target: "/opt/vite-app/"
 
+      - name: Deploy Backend
+        on:
+          push:
+            branches: [main]
+        jobs:
+          build:
+            runs-on: ubuntu-latest
+            steps:
+              - uses: actions/checkout@v3
+              - name: Set up Node.js
+                uses: actions/setup-node@v3
+                with:
+                  node-version: '16'
+              - name: Install dependencies
+                run: npm install
+              - name: Run application
+                env:
+                  SMTP_HOST: ${{ secrets.SMTP_HOST }}
+                  SMTP_PORT: ${{ secrets.SMTP_PORT }}
+                  SMTP_USER: ${{ secrets.SMTP_USER }}
+                  SMTP_PASS: ${{ secrets.SMTP_PASS }}
+                  SMTP_SECURE: ${{ secrets.SMTP_SECURE }}
+                run: node index.js
+
       - name: Deploy on VM
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -63,6 +87,10 @@ jobs:
           username: ${{ secrets.AZURE_USER }}
           key: ${{ secrets.AZURE_SSH_KEY }}
           port: ${{ secrets.AZURE_SSH_PORT || 22 }}
+          env:
+            MONGODB_URI: ${{ secrets.MONGODB_URI }}
+            RATE_LIMIT_WINDOW_MS: ${{ secrets.RATE_LIMIT_WINDOW_MS }}
+            RATE_LIMIT_MAX: ${{ secrets.RATE_LIMIT_MAX }}
           script: |
             set -e
             sudo mkdir -p /opt/vite-app
