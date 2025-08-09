@@ -1,6 +1,6 @@
 services:
   web:
-    image: ghcr.io/f-a-k-u/itica-web:latest
+    image: ghcr.io/itica-lat/itica-web:latest
     ports:
       - "80:80"
     restart: always
@@ -18,7 +18,7 @@ services:
       - FRONTEND_URL=${FRONTEND_URL}
 
   backend:
-    image: ghcr.io/f-a-k-u/itica-backend:latest
+    image: ghcr.io/itica-lat/itica-backend:latest
     ports:
       - "${PORT}:3001"
     restart: always
