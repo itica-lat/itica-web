@@ -153,13 +153,13 @@ const OpusLanding = () => {
             </p>
           </div>
           
-          <div className="flex justify-center mb-8">
+          <div className="flex justify-center mb-10">
             <div className="bg-white/70 backdrop-blur-sm rounded-xl p-1 border border-green-200">
               <button 
                 onClick={() => setActiveTab('freelancers')}
                 className={`px-6 py-3 rounded-lg cursor-pointer transition-all ${
                   activeTab === 'freelancers' 
-                    ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white mr-5' 
+                    ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white mr-5 md:mr-0' 
                     : 'text-green-600 hover:bg-green-50'
                 }`}
               >
@@ -169,7 +169,7 @@ const OpusLanding = () => {
                 onClick={() => setActiveTab('companies')}
                 className={`px-6 py-3 rounded-lg transition-all cursor-pointer ${
                   activeTab === 'companies' 
-                    ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white ml-5' 
+                    ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white ml-5 md:ml-0' 
                     : 'text-green-600 hover:bg-green-50'
                 }`}
               >
