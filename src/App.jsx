@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react
 import WaitlistPage from './pages/waitlist';
 import ContactPage from './pages/contact';
 import OpusPage from './pages/opus';
+import StudioPage from 'https://studio.itica.lat';
 
 // Componente principal de la página de inicio
 function HomePage() {
@@ -25,6 +26,7 @@ function HomePage() {
 
   const projects = [
     { name: "Opus", description: "Plataforma de hiring autonomo", tech: "AI/ML", link: "/opus" },
+    { name: "AI Studio", description: "Plataforma de AI en formato studio", tech: "AI", link: "/studio" },
   ];
 
   const frases = ["transciende", "mejora", "potencia", "transforma"];
@@ -44,9 +46,10 @@ function HomePage() {
     navigate('/contact');
   };
 
-  const handleOpusClick = () => {
-    navigate('/opus')
+  const handleProjetClick = (project) => {
+    navigate(project.link);  
   };
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#01161E] to-emerald-950">
@@ -212,7 +215,7 @@ function HomePage() {
                 </div>
                 <p className="text-gray-200 mb-6 leading-relaxed">{project.description}</p>
                 <div className="flex items-center text-emerald-600 font-medium group-hover:translate-x-2 transition-transform">
-                  <button onClick={handleOpusClick} className='hover:cursor-pointer'>Ver detalles</button>
+                  <button onClick={() => handleProjetClick(project)} className='hover:cursor-pointer'>Ver detalles</button>
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </div>
               </div>
@@ -296,6 +299,7 @@ export default function IticaWebsite() {
         <Route path="/waitlist" element={<WaitlistPage />} />
         <Route path='/contact' element={<ContactPage />} />
         <Route path='/opus' element={<OpusPage />} />
+        <Route path='/studio' element={<StudioPage/>} />
         
         {/* Ruta 404 - página no encontrada */}
         <Route path="*" element={
