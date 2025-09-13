@@ -10,7 +10,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react
 import WaitlistPage from './pages/waitlist';
 import ContactPage from './pages/contact';
 import OpusPage from './pages/opus';
-import StudioPage from 'https://studio.itica.lat';
+/*import StudioPage from 'https://studio.itica.lat';*/
 
 // Componente principal de la página de inicio
 function HomePage() {
@@ -26,7 +26,7 @@ function HomePage() {
 
   const projects = [
     { name: "Opus", description: "Plataforma de hiring autonomo", tech: "AI/ML", link: "/opus" },
-    { name: "AI Studio", description: "Plataforma de AI en formato studio", tech: "AI", link: "/studio" },
+    /*{ name: "AI Studio", description: "Plataforma de AI en formato studio", tech: "AI", link: "/studio" },*/
   ];
 
   const frases = ["transciende", "mejora", "potencia", "transforma"];
@@ -299,7 +299,7 @@ export default function IticaWebsite() {
         <Route path="/waitlist" element={<WaitlistPage />} />
         <Route path='/contact' element={<ContactPage />} />
         <Route path='/opus' element={<OpusPage />} />
-        <Route path='/studio' element={<StudioPage/>} />
+        {/*<Route path='/studio' element={<StudioPage/>} />*/}
         
         {/* Ruta 404 - página no encontrada */}
         <Route path="*" element={
