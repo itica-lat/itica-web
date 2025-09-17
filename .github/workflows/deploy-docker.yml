@@ -54,7 +54,7 @@ jobs:
           key: ${{ secrets.AZURE_SSH_KEY }}
           port: ${{ secrets.AZURE_SSH_PORT }}
           source: "docker-compose.yml"
-          target: "/opt/vite-app/"
+          target: "/home/${{ secrets.AZURE_USER }}/vite-app/"
 
       - name: Deploy on VM
         uses: appleboy/ssh-action@v1.2.0
@@ -66,8 +66,8 @@ jobs:
           envs: MONGODB_URI,MONGODB_USER,MONGODB_PASS,MONGODB_DATABASE,SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASS,SMTP_SECURE,EMAIL_FROM,INTERNAL_EMAIL,SALES_EMAIL,RATE_LIMIT_WINDOW_MS,RATE_LIMIT_MAX_REQUESTS,PORT,FRONTEND_URL,GHCR_TOKEN,GHCR_USERNAME
           script: |
             set -e
-            sudo mkdir -p /opt/vite-app
-            cd /opt/vite-app
+            mkdir -p /home/${{ secrets.AZURE_USER }}/vite-app
+            cd /home/${{ secrets.AZURE_USER }}/vite-app
             
             # Crear archivo .env con las variables de entorno
             cat > .env << EOF
