@@ -414,42 +414,150 @@ app.post('/api/submit', limiter, async (req, res) => {
       });
     }
 
-    // Send notification email
+    // Send notification emails (both to internal team and user)
     try {
       const emailType = type === 'job' ? 'oferta de trabajo' : 'idea';
-      const subject = `Nueva ${emailType} recibida`;
+      const userEmail = formData.email || formData.correo;
 
-      let emailContent = `<h2>Nueva ${emailType} recibida</h2>`;
+      // 1. Send notification to internal team
+      const internalSubject = `Nueva ${emailType} recibida`;
+      let internalEmailContent = `<h2>Nueva ${emailType} recibida</h2>`;
 
-      // Format form data
+      // Format form data for internal email
       Object.entries(formData).forEach(([key, value]) => {
-        emailContent += `<p><strong>${key}:</strong> ${value}</p>`;
+        internalEmailContent += `<p><strong>${key}:</strong> ${value}</p>`;
       });
 
-      // Add metadata summary
+      // Add metadata summary for internal email
       if (metadata) {
-        emailContent += `<hr><h3>Información técnica:</h3>`;
-        emailContent += `<p><strong>IP:</strong> ${metadata.ip || 'No disponible'}</p>`;
-        emailContent += `<p><strong>Ubicación:</strong> ${metadata.location ? `${metadata.location.city}, ${metadata.location.country}` : 'No disponible'}</p>`;
-        emailContent += `<p><strong>Navegador:</strong> ${metadata.userAgent || 'No disponible'}</p>`;
-        emailContent += `<p><strong>Fecha:</strong> ${metadata.timestamp || submittedAt}</p>`;
+        internalEmailContent += `<hr><h3>Información técnica:</h3>`;
+        internalEmailContent += `<p><strong>IP:</strong> ${metadata.ip || 'No disponible'}</p>`;
+        internalEmailContent += `<p><strong>Ubicación:</strong> ${metadata.location ? `${metadata.location.city}, ${metadata.location.country}` : 'No disponible'}</p>`;
+        internalEmailContent += `<p><strong>Navegador:</strong> ${metadata.userAgent || 'No disponible'}</p>`;
+        internalEmailContent += `<p><strong>Fecha:</strong> ${metadata.timestamp || submittedAt}</p>`;
       }
 
-      const mailOptions = {
+      const internalMailOptions = {
         from: `"Formulario ITI" <${process.env.EMAIL_FROM || 'noreply@itica.lat'}>`,
         to: process.env.INTERNAL_EMAIL || 'submissions@itica.lat',
-        subject,
-        html: emailContent
+        subject: internalSubject,
+        html: internalEmailContent
       };
 
-      await transporter.sendMail(mailOptions);
-      logger.info(`Notification email sent for ${type} submission`, 'email_sent', {
+      await transporter.sendMail(internalMailOptions);
+      logger.info(`Internal notification email sent for ${type} submission`, 'email_sent', {
         submissionId: newSubmission._id,
         submissionType: type,
-        recipient: mailOptions.to
+        recipient: internalMailOptions.to
       });
+
+      // 2. Send confirmation copy to user
+      if (userEmail) {
+        const userSubject = type === 'job'
+          ? '¡Gracias por tu aplicación a Itica!'
+          : '¡Gracias por compartir tu idea con Itica!';
+
+        const userName = formData.nombre || 'Usuario';
+
+        let userEmailContent = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8f9fa; padding: 20px;">
+            <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+              <div style="text-align: center; margin-bottom: 30px;">
+                <img src="https://itica.lat/logo.png" alt="Itica" style="max-width: 150px; height: auto;" onerror="this.style.display='none'">
+                <h1 style="color: #2563eb; margin: 20px 0; font-size: 28px;">Itica</h1>
+              </div>
+
+              <h2 style="color: #2563eb; margin-bottom: 20px;">¡Hola ${userName}!</h2>
+
+              <p style="color: #374151; font-size: 16px; line-height: 1.6; margin-bottom: 20px;">
+                ${type === 'job'
+                  ? 'Gracias por tu interés en formar parte del equipo de Itica. Hemos recibido tu aplicación y la revisaremos cuidadosamente.'
+                  : 'Gracias por compartir tu idea con nosotros. Hemos recibido tu propuesta y la evaluaremos junto a nuestro equipo.'}
+              </p>
+
+              <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3 style="color: #374151; margin-top: 0; font-size: 18px;">Resumen de tu ${type === 'job' ? 'aplicación' : 'idea'}:</h3>
+        `;
+
+        // Add form data summary for user (excluding sensitive metadata)
+        const userFriendlyFields = {
+          nombre: 'Nombre',
+          email: 'Email',
+          correo: 'Email',
+          empresa: 'Empresa',
+          titulo: 'Título',
+          categoria: 'Categoría',
+          posicion: 'Posición',
+          descripcion: 'Descripción',
+          motivacion: 'Motivación'
+        };
+
+        Object.entries(formData).forEach(([key, value]) => {
+          if (userFriendlyFields[key] && value) {
+            userEmailContent += `<p style="margin: 8px 0; color: #6b7280;"><strong>${userFriendlyFields[key]}:</strong> ${value}</p>`;
+          }
+        });
+
+        userEmailContent += `
+              </div>
+
+              <div style="background-color: #ecfdf5; padding: 20px; border-radius: 8px; border-left: 4px solid #10b981; margin: 20px 0;">
+                <h3 style="color: #065f46; margin-top: 0; font-size: 16px;">¿Qué sigue?</h3>
+                <ul style="color: #047857; margin: 10px 0; padding-left: 20px;">
+                  ${type === 'job'
+                    ? `<li>Revisaremos tu perfil y experiencia</li>
+                       <li>Si hay un match, te contactaremos para una entrevista</li>
+                       <li>Te mantendremos informado sobre el proceso</li>`
+                    : `<li>Nuestro equipo evaluará tu propuesta</li>
+                       <li>Te contactaremos si necesitamos más información</li>
+                       <li>Si decidimos avanzar, te propondremos los siguientes pasos</li>`
+                  }
+                </ul>
+              </div>
+
+              <p style="color: #6b7280; font-size: 14px; line-height: 1.6; margin: 20px 0;">
+                Normalmente respondemos en un plazo de 3-5 días hábiles. Si tienes alguna pregunta urgente,
+                no dudes en contactarnos respondiendo a este email.
+              </p>
+
+              <div style="text-align: center; margin: 30px 0;">
+                <a href="https://itica.lat" style="background-color: #2563eb; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
+                  Visitar Itica.lat
+                </a>
+              </div>
+
+              <hr style="border: 1px solid #e5e7eb; margin: 30px 0;">
+
+              <div style="text-align: center;">
+                <p style="color: #6b7280; font-size: 14px; margin: 10px 0;">
+                  <strong>Equipo de Itica</strong><br>
+                  Ideas, Talento, Innovación
+                </p>
+                <p style="color: #9ca3af; font-size: 12px; margin: 20px 0;">
+                  Este correo fue enviado a ${userEmail} porque enviaste ${type === 'job' ? 'una aplicación' : 'una idea'} a través de nuestro formulario.
+                </p>
+              </div>
+            </div>
+          </div>
+        `;
+
+        const userMailOptions = {
+          from: `"Itica - Ideas, Talento, Innovación" <${process.env.EMAIL_FROM || 'noreply@itica.lat'}>`,
+          to: userEmail,
+          subject: userSubject,
+          html: userEmailContent
+        };
+
+        await transporter.sendMail(userMailOptions);
+        logger.info(`User confirmation email sent for ${type} submission`, 'user_email_sent', {
+          submissionId: newSubmission._id,
+          submissionType: type,
+          recipient: userEmail
+        });
+      }
+
     } catch (emailError) {
-      logger.error('Error sending notification email', 'email_error', {
+      logger.error('Error sending notification emails', 'email_error', {
         submissionId: newSubmission._id,
         submissionType: type,
         errorDetails: emailError
