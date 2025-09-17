@@ -1,0 +1,17 @@
+{
+  "id": "68ca2e7916e2b1a0bbf0e3a7",
+  "type": "idea",
+  "formData": {
+    "nombre": "Test User",
+    "email": "test@example.com",
+    "categoria": "ai-ml",
+    "titulo": "Test Idea"
+  },
+  "metadata": {
+    "ip": "127.0.0.1",
+    "userAgent": "curl/test",
+    "timestamp": "2025-09-17T03:43:53.555Z"
+  },
+  "submittedAt": "2025-09-17T03:43:53.555Z",
+  "savedToFile": "2025-09-17T03:43:53.560Z"
+}

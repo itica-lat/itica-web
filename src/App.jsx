@@ -10,6 +10,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react
 import WaitlistPage from './pages/waitlist';
 import ContactPage from './pages/contact';
 import OpusPage from './pages/opus';
+import ITIPage from './pages/iti';
 /*import StudioPage from 'https://studio.itica.lat';*/
 
 // Componente principal de la página de inicio
@@ -299,6 +300,7 @@ export default function IticaWebsite() {
         <Route path="/waitlist" element={<WaitlistPage />} />
         <Route path='/contact' element={<ContactPage />} />
         <Route path='/opus' element={<OpusPage />} />
+        <Route path='/iti' element={<ITIPage />} />
         {/*<Route path='/studio' element={<StudioPage/>} />*/}
         
         {/* Ruta 404 - página no encontrada */}

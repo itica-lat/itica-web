@@ -2,10 +2,10 @@
   "name": "contact-system-backend",
   "version": "1.0.0",
   "description": "Sistema completo de gestión de contactos con emails automáticos",
-  "main": "contact-server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node contact-server.js",
-    "dev": "nodemon contact-server.js",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed": "node scripts/seed-data.js"
   },
