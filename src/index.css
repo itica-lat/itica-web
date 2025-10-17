@@ -1,1 +1,201 @@
-@import "tailwindcss"
+@import "tailwindcss";
+
+/* MADE Outer Sans Font Family */
+@font-face {
+  font-family: 'MADE Outer Sans';
+  src: url('/fonts/MADE Outer Sans Thin PERSONAL USE.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADE Outer Sans';
+  src: url('/fonts/MADE Outer Sans Light PERSONAL USE.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADE Outer Sans';
+  src: url('/fonts/MADE Outer Sans Regular PERSONAL USE.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADE Outer Sans';
+  src: url('/fonts/MADE Outer Sans Medium PERSONAL USE.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADE Outer Sans';
+  src: url('/fonts/MADE Outer Sans Bold PERSONAL USE.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADE Outer Sans';
+  src: url('/fonts/MADE Outer Sans Black PERSONAL USE.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* MADE Outer Sans Alt Font Family */
+@font-face {
+  font-family: 'MADE Outer Sans Alt';
+  src: url('/fonts/MADE Outer Sans Alt Thin PERSONAL USE.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADE Outer Sans Alt';
+  src: url('/fonts/MADE Outer Sans Alt Light PERSONAL USE.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADE Outer Sans Alt';
+  src: url('/fonts/MADE Outer Sans Alt Regular PERSONAL USE.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADE Outer Sans Alt';
+  src: url('/fonts/MADE Outer Sans Alt Medium PERSONAL USE.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADE Outer Sans Alt';
+  src: url('/fonts/MADE Outer Sans Alt Bold PERSONAL USE.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADE Outer Sans Alt';
+  src: url('/fonts/MADE Outer Sans Alt Black PERSONAL USE.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* MADE Outer Sans Outline Font Family */
+@font-face {
+  font-family: 'MADE Outer Sans Outline';
+  src: url('/fonts/MADE Outer Sans Outline Thin PERSONAL USE.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADE Outer Sans Outline';
+  src: url('/fonts/MADE Outer Sans Outline Light PERSONAL USE.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADE Outer Sans Outline';
+  src: url('/fonts/MADE Outer Sans Outline Regular PERSONAL USE.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADE Outer Sans Outline';
+  src: url('/fonts/MADE Outer Sans Outline Medium PERSONAL USE.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADE Outer Sans Outline';
+  src: url('/fonts/MADE Outer Sans Outline Bold PERSONAL USE.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADE Outer Sans Outline';
+  src: url('/fonts/MADE Outer Sans Outline Black PERSONAL USE.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* MADE Outer Sans Outline Alt Font Family */
+@font-face {
+  font-family: 'MADE Outer Sans Outline Alt';
+  src: url('/fonts/MADE Outer Sans Outline Alt Thin PERSONAL USE.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADE Outer Sans Outline Alt';
+  src: url('/fonts/MADE Outer Sans Outline Alt Light PERSONAL USE.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADE Outer Sans Outline Alt';
+  src: url('/fonts/MADE Outer Sans Outline Alt Regular PERSONAL USE.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADE Outer Sans Outline Alt';
+  src: url('/fonts/MADE Outer Sans Outline Alt Medium PERSONAL USE.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADE Outer Sans Outline Alt';
+  src: url('/fonts/MADE Outer Sans Outline Alt Bold PERSONAL USE.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MADE Outer Sans Outline Alt';
+  src: url('/fonts/MADE Outer Sans Outline Alt Black PERSONAL USE.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* Theme variables and default body settings */
+:root {
+  --font-sans: 'MADE Outer Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-sans-alt: 'MADE Outer Sans Alt', ui-sans-serif, system-ui, sans-serif;
+  --font-outline: 'MADE Outer Sans Outline', ui-sans-serif, system-ui, sans-serif;
+  --font-outline-alt: 'MADE Outer Sans Outline Alt', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Make the default site font the Light weight (300) */
+body {
+  font-family: var(--font-sans);
+  font-weight: 300;
+}
+
+/* Fade-in animation for tab transitions */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out;
+}
