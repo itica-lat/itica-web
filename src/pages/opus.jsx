@@ -152,7 +152,7 @@ const OpusLanding = () => {
               Tecnología de vanguardia para revolucionar el mercado freelance en LATAM
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8 max-w-7/8 mx-auto px-4">
             {features.map((feature, index) => (
               <div key={index} className="bg-white/15 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-white/30 hover:border-green-200/60 transition-all hover:shadow-lg group">
                 <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-green-100 to-emerald-100 rounded-lg flex items-center justify-center mb-4 md:mb-6 group-hover:from-green-200 group-hover:to-emerald-200 transition-all">
