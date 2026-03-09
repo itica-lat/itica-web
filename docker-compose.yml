@@ -54,7 +54,6 @@ services:
 
   mongodb:
     image: mongo:7.0
-    container_name: itica_mongodb
     restart: always
     ports:
       - "27017:27017"

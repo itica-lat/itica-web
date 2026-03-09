@@ -97,6 +97,9 @@ jobs:
             FRONTEND_URL=${FRONTEND_URL}
             EOF
 
+            # Crear red externa web-proxy si no existe
+            podman network exists web-proxy || podman network create web-proxy
+
             # Login a GHCR con PAT de solo lectura
             echo "${GHCR_TOKEN}" | podman login ghcr.io -u "${GHCR_USERNAME}" --password-stdin
 
