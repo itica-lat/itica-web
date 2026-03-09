@@ -1,4 +1,4 @@
-name: Build & Deploy (Docker)
+name: Build & Deploy (Podman)
 
 on:
   push:
@@ -46,16 +46,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Copy docker-compose.yml to VM
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.AZURE_HOST }}
-          username: ${{ secrets.AZURE_USER }}
-          key: ${{ secrets.AZURE_SSH_KEY }}
-          port: ${{ secrets.AZURE_SSH_PORT }}
-          source: "docker-compose.yml"
-          target: "/home/${{ secrets.AZURE_USER }}/vite-app/"
-
       - name: Deploy on VM
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -63,12 +53,30 @@ jobs:
           username: ${{ secrets.AZURE_USER }}
           key: ${{ secrets.AZURE_SSH_KEY }}
           port: ${{ secrets.AZURE_SSH_PORT }}
-          envs: MONGODB_URI,MONGODB_USER,MONGODB_PASS,MONGODB_DATABASE,SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASS,SMTP_SECURE,EMAIL_FROM,INTERNAL_EMAIL,SALES_EMAIL,RATE_LIMIT_WINDOW_MS,RATE_LIMIT_MAX_REQUESTS,PORT,FRONTEND_URL,GHCR_TOKEN,GHCR_USERNAME
+          envs: DEPLOY_KEY,MONGODB_URI,MONGODB_USER,MONGODB_PASS,MONGODB_DATABASE,SMTP_HOST,SMTP_PORT,SMTP_USER,SMTP_PASS,SMTP_SECURE,EMAIL_FROM,INTERNAL_EMAIL,SALES_EMAIL,RATE_LIMIT_WINDOW_MS,RATE_LIMIT_MAX_REQUESTS,PORT,FRONTEND_URL,GHCR_TOKEN,GHCR_USERNAME
           script: |
             set -e
-            mkdir -p /home/${{ secrets.AZURE_USER }}/vite-app
-            cd /home/${{ secrets.AZURE_USER }}/vite-app
-            
+
+            # Configurar deploy key de GitHub (read-only)
+            mkdir -p ~/.ssh
+            echo "${DEPLOY_KEY}" > ~/.ssh/github_deploy_key
+            chmod 600 ~/.ssh/github_deploy_key
+            export GIT_SSH_COMMAND="ssh -i ~/.ssh/github_deploy_key -o StrictHostKeyChecking=no"
+
+            # Clonar o actualizar el repositorio para obtener docker-compose.yml
+            REPO_DIR="/home/$USER/vite-app"
+            if [ -d "${REPO_DIR}/.git" ]; then
+              git -C "${REPO_DIR}" pull origin main
+            else
+              git clone git@github.com:itica-lat/itica-web.git "${REPO_DIR}"
+            fi
+
+            # Limpiar deploy key
+            rm -f ~/.ssh/github_deploy_key
+            unset GIT_SSH_COMMAND
+
+            cd "${REPO_DIR}"
+
             # Crear archivo .env con las variables de entorno
             cat > .env << EOF
             MONGODB_URI=${MONGODB_URI}
@@ -88,15 +96,16 @@ jobs:
             PORT=${PORT}
             FRONTEND_URL=${FRONTEND_URL}
             EOF
-            
+
             # Login a GHCR con PAT de solo lectura
-            echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GHCR_USERNAME}" --password-stdin
-            
+            echo "${GHCR_TOKEN}" | podman login ghcr.io -u "${GHCR_USERNAME}" --password-stdin
+
             # Bajar última imagen y levantar
-            docker compose pull
-            docker compose up -d
-            docker image prune -f
+            podman compose pull
+            podman compose up -d --remove-orphans
+            podman image prune -f
         env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           MONGODB_USER: ${{ secrets.MONGODB_USER }}
           MONGODB_PASS: ${{ secrets.MONGODB_PASS }}
