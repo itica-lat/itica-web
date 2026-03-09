@@ -64,7 +64,7 @@ jobs:
             export GIT_SSH_COMMAND="ssh -i ~/.ssh/github_deploy_key -o StrictHostKeyChecking=no"
 
             # Clonar o actualizar el repositorio para obtener docker-compose.yml
-            REPO_DIR="/home/$USER/vite-app"
+            REPO_DIR="/var/www/itica-web"
             if [ -d "${REPO_DIR}/.git" ]; then
               git -C "${REPO_DIR}" pull origin main
             else
