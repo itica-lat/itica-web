@@ -143,3 +143,6 @@ vite.config.ts.timestamp-*
 # MacOS
 
 .DS_Store
+
+# Bun replaces npm; prevent accidental commits of npm lockfile
+package-lock.json

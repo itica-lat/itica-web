@@ -1,12 +1,12 @@
-FROM node:20-alpine AS build
+FROM oven/bun:1-alpine AS build
 WORKDIR /app
-COPY package*.json ./
-RUN npm ci
+COPY bun.lock package.json ./
+RUN bun install --frozen-lockfile
 COPY . .
-RUN npm run build
+RUN bun run build
 
-FROM node:20-alpine
-RUN npm i -g serve
+FROM oven/bun:1-alpine
+RUN bun install -g serve
 COPY --from=build /app/dist /app/dist
 EXPOSE 80
 CMD ["serve", "-s", "/app/dist", "-l", "80"]
