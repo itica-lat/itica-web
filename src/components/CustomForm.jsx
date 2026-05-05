@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Send, X, CheckCircle, AlertCircle } from 'lucide-react';
+import { Send, CheckCircle, AlertCircle } from 'lucide-react';
 
 const CustomForm = ({
   title = "Formulario",
@@ -25,53 +25,27 @@ const CustomForm = ({
   useEffect(() => {
     if (!collectMetadata) return;
 
-    const collectClientData = async () => {
-      const clientData = {
-        timestamp: new Date().toISOString(),
-        userAgent: navigator.userAgent,
-        language: navigator.language,
-        platform: navigator.platform,
-        cookieEnabled: navigator.cookieEnabled,
-        screen: {
-          width: screen.width,
-          height: screen.height,
-          colorDepth: screen.colorDepth
-        },
-        viewport: {
-          width: window.innerWidth,
-          height: window.innerHeight
-        },
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        url: window.location.href,
-        referrer: document.referrer
-      };
-
-      // Try to get IP address from a service
-      try {
-        const ipResponse = await fetch('https://api.ipify.org?format=json');
-        const ipData = await ipResponse.json();
-        clientData.ip = ipData.ip;
-      } catch (error) {
-        console.warn('Could not fetch IP address:', error);
-      }
-
-      // Try to get more detailed location info
-      try {
-        const geoResponse = await fetch('https://ipapi.co/json/');
-        const geoData = await geoResponse.json();
-        clientData.location = {
-          country: geoData.country_name,
-          city: geoData.city,
-          region: geoData.region
-        };
-      } catch (error) {
-        console.warn('Could not fetch location data:', error);
-      }
-
-      setMetadata(clientData);
+    const clientData = {
+      timestamp: new Date().toISOString(),
+      userAgent: navigator.userAgent,
+      language: navigator.language,
+      platform: navigator.platform,
+      cookieEnabled: navigator.cookieEnabled,
+      screen: {
+        width: screen.width,
+        height: screen.height,
+        colorDepth: screen.colorDepth
+      },
+      viewport: {
+        width: window.innerWidth,
+        height: window.innerHeight
+      },
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      url: window.location.href,
+      referrer: document.referrer
     };
 
-    collectClientData();
+    setMetadata(clientData);
   }, [collectMetadata]);
 
   // Initialize form data
@@ -96,7 +70,7 @@ const CustomForm = ({
     }
 
     if (field.type === 'tel' && value) {
-      const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+      const phoneRegex = /^\+?[1-9][\d]{0,15}$/;
       if (!phoneRegex.test(value.replace(/\s/g, ''))) {
         return 'Ingresa un teléfono válido';
       }

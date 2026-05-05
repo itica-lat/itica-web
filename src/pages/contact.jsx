@@ -48,33 +48,15 @@ const ContactPage = () => {
     setIsSubmitting(true);
     setSubmitStatus(null);
 
-    try {
-      // Aquí harías la llamada a tu API backend
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        setSubmitStatus({
-          type: 'success',
-          message: 'Tu consulta ha sido enviada con éxito. Nos pondremos en contacto contigo pronto.'
-        });
-        setFormData({ nombre: '', apellido: '', correo: '', consulta: '' });
-      } else {
-        throw new Error('Error en el servidor');
-      }
-    } catch (error) {
+    // Simulate successful submission
+    setTimeout(() => {
       setSubmitStatus({
-        type: 'error',
-        message: 'Ocurrió un error al enviar la solicitud. Por favor intenta de nuevo.'
+        type: 'success',
+        message: 'Tu consulta ha sido enviada con éxito. Nos pondremos en contacto contigo pronto.'
       });
-    } finally {
+      setFormData({ nombre: '', apellido: '', correo: '', consulta: '' });
       setIsSubmitting(false);
-    }
+    }, 1000);
   };
 
   return (

@@ -1,34 +1,31 @@
 import { useState, useEffect } from 'react';
-import { ChevronDown, Brain, Globe, Code, Users, ArrowRight, Menu, X, Star, CheckCircle } from 'lucide-react';
+import { Brain, Globe, Code, ArrowRight, Menu, X, Star, CheckCircle, ExternalLink, Github } from 'lucide-react';
 import { useTypingEffect } from './hooks/typingEffect';
-import { useScrollAnimation } from './hooks/scrollAnimations';
 import { AnimatedElement } from './components/AnimatedElement';
 import IticaLogo from './assets/Itica_Logo_Invertido.png';
 import services from './data/services.json';
 import { Icon } from './components/Icon';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
-import WaitlistPage from './pages/waitlist';
 import ContactPage from './pages/contact';
-import OpusPage from './pages/opus';
 import ITIPage from './pages/iti';
-/*import StudioPage from 'https://studio.itica.lat';*/
 
 // Componente principal de la página de inicio
 function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const [repos, setRepos] = useState([]);
+  const [reposLoading, setReposLoading] = useState(true);
 
-  const projects = [
-    { name: "Opus", description: "Plataforma de hiring autonomo", tech: "AI/ML", link: "/opus" },
-    /*{ name: "AI Studio", description: "Plataforma de AI en formato studio", tech: "AI", link: "/studio" },*/
-  ];
+  useEffect(() => {
+    fetch('https://api.github.com/orgs/itica-lat/repos?sort=updated&per_page=20')
+      .then(res => res.json())
+      .then(data => {
+        setRepos(Array.isArray(data) ? data : []);
+        setReposLoading(false);
+      })
+      .catch(() => setReposLoading(false));
+  }, []);
 
   const frases = ["transciende", "mejora", "potencia", "transforma"];
   
@@ -39,18 +36,11 @@ function HomePage() {
     fraseAleatoria: true
   });
 
-  const handleWaitlistClick = () => {
-    navigate('/waitlist');
-  };
-
   const handleContactClick = () => {
     navigate('/contact');
   };
 
-  const handleProjetClick = (project) => {
-    navigate(project.link);  
-  };
-  
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#01161E] to-emerald-950">
@@ -70,12 +60,15 @@ function HomePage() {
               <a href="#servicios" className="text-gray-200 hover:text-emerald-600 transition-colors">Servicios</a>
               <a href="#proyectos" className="text-gray-200 hover:text-emerald-600 transition-colors">Proyectos</a>
               <a href="#contacto" className="text-gray-200 hover:text-emerald-600 transition-colors">Contacto</a>
-              <Link 
-                to="/waitlist"
-                className="bg-emerald-600/80 text-white px-4 xl:px-6 py-2 rounded-full hover:shadow-lg cursor-pointer transition-all duration-300 transform hover:scale-105 hover:bg-emerald-600 whitespace-nowrap"
+              <a 
+                href="https://github.com/itica-lat"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-emerald-600/80 text-white px-4 xl:px-6 py-2 rounded-full hover:shadow-lg cursor-pointer transition-all duration-300 transform hover:scale-105 hover:bg-emerald-600 whitespace-nowrap flex items-center gap-2"
               >
-                Únete a Opus
-              </Link>
+                <Github className="w-4 h-4" />
+                GitHub
+              </a>
             </div>
 
             <button 
@@ -95,12 +88,14 @@ function HomePage() {
               <a href="#servicios" className="block text-gray-200 hover:text-emerald-600 transition-colors py-2">Servicios</a>
               <a href="#proyectos" className="block text-gray-200 hover:text-emerald-600 transition-colors py-2">Proyectos</a>
               <a href="#contacto" className="block text-gray-200 hover:text-emerald-600 transition-colors py-2">Contacto</a>
-              <Link 
-                to="/waitlist"
+              <a 
+                href="https://github.com/itica-lat"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="block w-full bg-emerald-600 text-white px-6 py-3 rounded-full mt-4 text-center"
               >
-                Únete a Opus
-              </Link>
+                GitHub
+              </a>
             </div>
           </div>
         )}
@@ -196,32 +191,56 @@ function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gray-200 bg-clip-text text-transparent">
-              Proyectos Destacados
+              Proyectos Open Source
             </h2>
             <p className="text-xl text-gray-200 max-w-3xl mx-auto">
-              Cada proyecto lleva el nombre de figuras clásicas que representan sabiduría, innovación y excelencia
+              Todos nuestros proyectos están disponibles en{' '}
+              <a
+                href="https://github.com/itica-lat"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-emerald-400 hover:text-emerald-300 underline"
+              >
+                github.com/itica-lat
+              </a>
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {projects.map((project, i) => (
-              <div key={i} className="group bg-white/15 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
-                <div className="flex items-start justify-between mb-6">
-                  <h3 className="text-2xl font-bold text-gray-200 group-hover:text-emerald-600 transition-colors">
-                    {project.name}
-                  </h3>
-                  <span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium">
-                    {project.tech}
-                  </span>
-                </div>
-                <p className="text-gray-200 mb-6 leading-relaxed">{project.description}</p>
-                <div className="flex items-center text-emerald-600 font-medium group-hover:translate-x-2 transition-transform">
-                  <button onClick={() => handleProjetClick(project)} className='hover:cursor-pointer'>Ver detalles</button>
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </div>
-              </div>
-            ))}
-          </div>
+          {reposLoading ? (
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-2 border-emerald-500 border-t-transparent mx-auto"></div>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-8">
+              {repos.map((repo) => (
+                <a
+                  key={repo.id}
+                  href={repo.html_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group bg-white/15 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <h3 className="text-2xl font-bold text-gray-200 group-hover:text-emerald-600 transition-colors">
+                      {repo.name}
+                    </h3>
+                    <ExternalLink className="w-5 h-5 text-gray-400 group-hover:text-emerald-400 transition-colors flex-shrink-0" />
+                  </div>
+                  <p className="text-gray-200 mb-4 leading-relaxed line-clamp-3">
+                    {repo.description || 'Sin descripción'}
+                  </p>
+                  <div className="flex items-center gap-4 text-sm text-gray-400">
+                    {repo.language && (
+                      <span className="px-3 py-1 bg-emerald-100/20 text-emerald-300 rounded-full">
+                        {repo.language}
+                      </span>
+                    )}
+                    <span>★ {repo.stargazers_count}</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -296,12 +315,8 @@ export default function IticaWebsite() {
         {/* Ruta principal - página de inicio */}
         <Route path="/" element={<HomePage />} />
         
-        {/* Ruta de la waitlist */}
-        <Route path="/waitlist" element={<WaitlistPage />} />
         <Route path='/contact' element={<ContactPage />} />
-        <Route path='/opus' element={<OpusPage />} />
         <Route path='/iti' element={<ITIPage />} />
-        {/*<Route path='/studio' element={<StudioPage/>} />*/}
         
         {/* Ruta 404 - página no encontrada */}
         <Route path="*" element={

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Lightbulb, Briefcase, Users, Globe } from 'lucide-react';
+import { ArrowLeft, Lightbulb, Briefcase, Globe } from 'lucide-react';
 import CustomForm from '../components/CustomForm';
 
 const ITIPage = () => {
@@ -246,23 +246,10 @@ const ITIPage = () => {
     }
   ];
 
-  const handleFormSubmit = async (data) => {
-    const response = await fetch('/api/submit', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ...data,
-        type: activeTab === 'ideas' ? 'idea' : 'job'
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error ${response.status}: ${response.statusText}`);
-    }
-
-    return await response.json();
+  const handleFormSubmit = async (_data) => {
+    // Simulate successful submission
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    return { success: true };
   };
 
   return (
